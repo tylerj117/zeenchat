@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .forms import CustomUserForm
 
-# Add this new logout view
 def logout_view(request):
     logout(request)
     return redirect('login')
