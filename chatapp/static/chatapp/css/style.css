@@ -1,0 +1,56 @@
+/* static/chatapp/css/style.css */
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #1e1b4b;
+}
+
+/* Custom scrollbar */
+#chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+/* Message animations */
+.message-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.message-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    #chat-messages {
+        height: calc(100vh - 300px);
+    }
+}
+
+/* Form styling */
+input:focus, button:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: var(--primary-color);
+}
+
+/* Hover effects */
+.hover-effect:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}

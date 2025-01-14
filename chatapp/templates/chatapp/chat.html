@@ -1,0 +1,107 @@
+<!-- templates/chatapp/chat.html -->
+{% extends 'chatapp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md">
+    <div class="border-b p-4">
+        <h2 class="text-xl font-semibold">Chat with {{ other_user.username }}</h2>
+    </div>
+    
+    <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
+        {% for message in messages %}
+        <div class="flex {% if message.sender == request.user %}justify-end{% endif %}">
+            <div class="max-w-xs lg:max-w-md p-3 rounded-lg {% if message.sender == request.user %}bg-indigo-600 text-white{% else %}bg-gray-200{% endif %}">
+                <p>{{ message.content }}</p>
+                <span class="text-xs {% if message.sender == request.user %}text-indigo-200{% else %}text-gray-500{% endif %}">
+                    {{ message.timestamp|date:"g:i A" }}
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="border-t p-4">
+        <form id="chat-form" class="flex space-x-4">
+            {% csrf_token %}
+            <input type="text" id="chat-message-input" name="message" class="flex-1 rounded-lg border p-2" placeholder="Type your message...">
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                Send
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<script src="{% static 'chatapp/js/chat.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        new ChatManager('{{ request.user.username }}', '{{ other_user.username }}');
+        
+        // Scroll to bottom on initial load
+        const messagesDiv = document.getElementById('chat-messages');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+</script>
+
+
+{% comment %} 
+<script>
+    const messageForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('chat-message-input');
+    const messagesDiv = document.getElementById('chat-messages');
+    
+
+    
+    // Function to add message to chat
+    function appendMessage(message, isSender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `flex ${isSender ? 'justify-end' : ''}`;
+        messageDiv.innerHTML = `
+            <div class="max-w-xs lg:max-w-md p-3 rounded-lg ${isSender ? 'bg-indigo-600 text-white' : 'bg-gray-200'}">
+                <p>${message}</p>
+                <span class="text-xs ${isSender ? 'text-indigo-200' : 'text-gray-500'}">
+                    ${new Date().toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'})}
+                </span>
+            </div>
+        `;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Handle form submission
+    messageForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        
+        if (message) {
+            try {
+                // Save message to database
+                const response = await fetch('/save-message/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        receiver: '{{ other_user.username }}'
+                    })
+                });
+
+                if (response.ok) {
+                    // Add message to chat
+                    appendMessage(message, true);
+                    messageInput.value = '';
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
+    });
+
+    // Scroll to bottom on load
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+</script> 
+
+{% endcomment %}
+{% endblock %}
