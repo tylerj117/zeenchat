@@ -39,22 +39,23 @@ def save_message(request):
             data = json.loads(request.body)
             sender = request.user
             receiver = User.objects.get(username=data['receiver'])
-            message = Message.objects.create(
+
+            message = Message(
                 sender=sender,
                 receiver=receiver,
-                content=data['message']
             )
+            message.content = data['message']  # Automatically encrypts
+            message.save()
+
             return JsonResponse({
                 'status': 'success',
                 'message_id': message.id,
                 'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
             })
         except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'error': str(e)
-            }, status=400)
+            return JsonResponse({'status': 'error', 'error': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'error': 'Invalid request method'}, status=400)
+
 
 @login_required
 def chat(request, username):
@@ -63,9 +64,8 @@ def chat(request, username):
         (models.Q(sender=request.user, receiver=other_user) |
          models.Q(sender=other_user, receiver=request.user))
     ).order_by('timestamp')
-    
-    
+
     return render(request, 'chatapp/chat.html', {
         'other_user': other_user,
-        'messages': messages
+        'messages': messages  # content is auto-decrypted
     })
