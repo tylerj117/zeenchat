@@ -21,10 +21,10 @@
     </div>
 
     <div class="border-t p-4">
-        <form id="chat-form" class="flex space-x-4">
+        <form id="chat-form" class="flex flex-col sm:flex-row gap-4">
             {% csrf_token %}
-            <input type="text" id="chat-message-input" name="message" class="flex-1 rounded-lg border p-2" placeholder="Type your message...">
-            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+            <input type="text" id="chat-message-input" name="message" class="flex-1 rounded-lg border p-2 w-full" placeholder="Type your message...">
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 w-full sm:w-auto">
                 Send
             </button>
         </form>

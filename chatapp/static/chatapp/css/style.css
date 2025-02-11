@@ -33,12 +33,12 @@
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .container {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
     
     #chat-messages {
-        height: calc(100vh - 300px);
+        height: calc(100vh - 350px);
     }
 }
 
@@ -53,4 +53,39 @@ input:focus, button:focus {
 .hover-effect:hover {
     transform: translateY(-1px);
     transition: transform 0.2s ease;
+}
+
+/* Dropdown animations */
+#userDropdown, #notificationDropdown {
+    transform-origin: top right;
+    transition: all 0.2s ease-out;
+}
+
+#userDropdown.hidden, #notificationDropdown.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* Dropdown hover effects */
+.dropdown-item {
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(79, 70, 229, 0.1);
+}
+
+/* Icon hover effects */
+.nav-icon {
+    transition: transform 0.2s ease;
+}
+
+.nav-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Z-index management */
+.dropdown {
+    z-index: 50;
 }

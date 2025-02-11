@@ -28,7 +28,7 @@ def signup(request):
 
 @login_required
 def users(request):
-    users = User.objects.exclude(id=request.user.id)
+    users = User.objects.filter(is_superuser=False).exclude(id=request.user.id)
     return render(request, 'chatapp/users.html', {'users': users})
 
 
