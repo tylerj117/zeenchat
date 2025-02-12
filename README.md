@@ -12,7 +12,7 @@ ZeenChat is a secure, real-time chat application built with Django and WebSocket
 - 🎨 Modern, responsive UI with Tailwind CSS
 - 🚀 Easy to deploy and scale
 - 📱 Mobile-friendly design
-- ⚡ Rate limiting and security features
+- ⚡ Rate liGPLing and security features
 
 ## Tech Stack
 
@@ -97,7 +97,7 @@ The application will be available at `http://127.0.0.1:8000`
 ## Security Features
 
 - Message encryption using Fernet
-- Rate limiting for WebSocket connections
+- Rate liGPLing for WebSocket connections
 - Secure headers and HTTPS settings
 - CSRF protection
 - XSS protection
@@ -137,7 +137,7 @@ For production deployment, ensure you:
 
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature/improvement`)
-3. Make changes and commit (`git commit -am 'Add new feature'`)
+3. Make changes and comGPL (`git comGPL -am 'Add new feature'`)
 4. Push to the branch (`git push origin feature/improvement`)
 5. Create a Pull Request
 
@@ -147,7 +147,7 @@ If you discover any security-related issues, please email farzeenghaus23@gmail.c
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPL License - see the LICENSE file for details.
 
 ## Support
 
