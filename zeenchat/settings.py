@@ -16,16 +16,27 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ny+o5v-y861n+kguypqq2)ivq89wym@+e0fm5d)l1qx968ehc&'
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-ny+o5v-y861n+kguypqq2)ivq89wym@+e0fm5d)l1qx968ehc&"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv("DJANGO_DEBUG", "false").lower() == "true" else False
+DEBUG = True if (
+        os.getenv("DJANGO_DEBUG", "false").lower() == "true"
+) else False
 
-ALLOWED_HOSTS = ["*"]
+if hosts := os.getenv("DJANGO_ALLOWED_HOSTS", None) is not None:
+    ALLOWED_HOSTS = hosts.split(", ")
+
+# CSRF Configuration
+if origins := os.getenv("CSRF_TRUSTED_ORIGINS", None) is not None:
+    CSRF_TRUSTED_ORIGINS = origins.split(",")
+
+CSRF_COOKIE_SECURE = True if (
+        os.getenv("CSRF_COOKIE_SECURE", "false").lower() == "true"
+) else False
 
 
 # Application definition

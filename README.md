@@ -153,11 +153,12 @@ zeenchat/
 └── redis/
     └── conf/                # Redis configuration file(s)
 ```
+
 ## Docker Environment Variables
 
 ### `DJANGO_SECRET_KEY`
 
-**Default:** ' ' (Empty string) (**REQUIRED** *for production deployment*)
+**Default:** ' ' (Empty string) *(**REQUIRED** for production deployment)*
 
 A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key) for more information.
 
@@ -171,15 +172,27 @@ A boolean that turns on/off debug mode. See [Django documentation](https://docs.
 
 ### `DJANGO_ALLOWED_HOSTS`
 
-- *future feature, not yet implemented*
+**Default:** *[]* *(Empty list) (**REQUIRED** for production deployment)*
+
+A comma-seperated list of strings representing the host/domain names that this Django site can serve. This is a security measure to prevent HTTP Host header attacks, which are possible even under many seemingly-safe web server configurations. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts) for more information.
+
+Example  ENV file entry: `DJANGO_ALLOWED_HOSTS=localhost, 127.0.0.1, yourdomain.com`
 
 ### `CSRF_TRUSTED_ORIGINS`
 
-- *future feature, not yet implemented*
+**Default:** *[]* *(Empty list) (**REQUIRED** for production deployment)*
+
+A comma-seperated list of trusted origins for unsafe requests (e.g. POST). See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#csrf-trusted-origins) for more information.
+
+Example  ENV file entry: `CSRF_TRUSTED_ORIGINS=http://localhost, http://127.0.0.1, http://yourdomain.com, https://yourdomain.com`
 
 ### `CSRF_COOKIE_SECURE`
 
-- *future feature, not yet implemented*
+**Default:** *False* (**REQUIRED** for production deployment)*
+
+Whether to use a secure cookie for the CSRF cookie. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#csrf-cookie-secure) for more information.
+
+**SECURITY NOTE**: Warning:  Must be True for production deployment.
 
 ### `DATABASE` 
 
@@ -188,6 +201,9 @@ A boolean that turns on/off debug mode. See [Django documentation](https://docs.
 Specify database engine to use. Use mapping below:
 - 'sqlite3': SQLite3
 - 'pg': Postgres
+- ' ' *(null entry)*: Postgres
+
+Example ENV file entry: `DATABASE=sqlite3`
 
 ### `DB_NAME`
 
@@ -225,7 +241,7 @@ To set custom database port number (ignored when using SQLite3).
 
 To set password for Redis. See [Redis documentation]() for more information.
 
-**SECURITY NOTE**: # Warning: since Redis is pretty fast, an outside user can try up to 1 million passwords per second against a modern box. This means that you should use very strong passwords, otherwise they will be very easy to break.
+**SECURITY NOTE**: Warning: since Redis is pretty fast, an outside user can try up to 1 million passwords per second against a modern box. This means that you should use very strong passwords, otherwise they will be very easy to break.
 
 ### `REDIS_HOST`
 
