@@ -50,10 +50,15 @@ $ cd zeenchat
 ```
 
 #### 3. Update .env file
+
 ```bash
+$ cp docker/env.example .env
 $ nano docker/.env
-# required: update REDIS_PASSWORD
 ```
+
+Update applicable ENV file entries. 
+- At a minimum, update the REDIS_PASSWORD entry. 
+- For production deployment, additional entries must be updated. See [Environment Variables](#docker-environment-variables) for more information.
 
 #### 4. Create and Start Containers
 ```bash
