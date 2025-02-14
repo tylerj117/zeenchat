@@ -24,9 +24,23 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:${REDIS_IMAGE_TAG:-7.4.2-alpine}
+    volumes:
+      - ../redis/conf:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:?password missing!}
+    container_name: ${REDIS_HOSTNAME:-redis}
+    hostname: ${REDIS_HOSTNAME:-redis}
+    networks:
+      appNet:
+    expose:
+      - ${REDIS_PORT:-6379}
 
   db:
-    image: postgres:17.2-alpine
+    image: postgres:${DB_IMAGE_TAG:-17.2-alpine}
     restart: always
     user: postgres
     volumes:
