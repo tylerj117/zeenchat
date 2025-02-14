@@ -62,7 +62,7 @@ $ docker compose -f docker/compose.dev.yaml up --build -d
 
 The application will be available at http://localhost:8000.
 
-### Install via Traditional Virtual Environment
+## Install via Traditional Virtual Environment
 
 #### 1. Clone the Repository
 ```bash
@@ -154,7 +154,6 @@ zeenchat/
     └── conf/                # Redis configuration file(s)
 ```
 ## Docker Environment Variables
-___
 
 ### `DJANGO_SECRET_KEY`
 
