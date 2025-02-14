@@ -40,6 +40,7 @@ ___
 3. [Traditional Venv](#install-via-traditional-virtual-environment)
 
 ### Install via Docker Compose (for development)
+___
 
 *See the [official Docker documentation](https://docs.docker.com/compose/install/) for more information on Compose, including installation.*
 
@@ -62,7 +63,7 @@ $ docker compose -f docker/compose.dev.yaml up --build -d
 
 The application will be available at http://localhost:8000.
 
-## Install via Traditional Virtual Environment
+### Install via Traditional Virtual Environment
 
 #### 1. Clone the Repository
 ```bash
@@ -154,6 +155,7 @@ zeenchat/
     └── conf/                # Redis configuration file(s)
 ```
 ## Docker Environment Variables
+___
 
 ### `DJANGO_SECRET_KEY`
 
