@@ -40,7 +40,6 @@ ___
 3. [Traditional Venv](#install-via-traditional-virtual-environment)
 
 ### Install via Docker Compose (for development)
-___
 
 *See the [official Docker documentation](https://docs.docker.com/compose/install/) for more information on Compose, including installation.*
 
