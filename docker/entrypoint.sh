@@ -12,4 +12,4 @@ python manage.py migrate
 # Start server
 echo
 echo "Starting server..."
-gunicorn GalleryStorefront.wsgi:application --bind=0.0.0.0:8000
+gunicorn zeenchat.wsgi:application --bind=0.0.0.0:8000
