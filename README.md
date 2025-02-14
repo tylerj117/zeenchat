@@ -224,7 +224,7 @@ To set custom database user (ignored when using SQLite3).
 
 ### `DB_PASSWORD`
 
-**Default:** *appuser* *(optional)*
+**Default:** *appuser* *(**REQUIRED**) unless using SQLite3)*
 
 To set custom database password (ignored when using SQLite3).
 
