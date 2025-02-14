@@ -27,12 +27,12 @@ DEBUG = True if (
         os.getenv("DJANGO_DEBUG", "false").lower() == "true"
 ) else False
 
-if hosts := os.getenv("DJANGO_ALLOWED_HOSTS", None) is not None:
+if (hosts := os.getenv("DJANGO_ALLOWED_HOSTS", None)) is not None:
     ALLOWED_HOSTS = hosts.split(", ")
 
 # CSRF Configuration
-if origins := os.getenv("CSRF_TRUSTED_ORIGINS", None) is not None:
-    CSRF_TRUSTED_ORIGINS = origins.split(",")
+if (origins := os.getenv("CSRF_TRUSTED_ORIGINS", None)) is not None:
+    CSRF_TRUSTED_ORIGINS = origins.split(", ")
 
 CSRF_COOKIE_SECURE = True if (
         os.getenv("CSRF_COOKIE_SECURE", "false").lower() == "true"
@@ -110,10 +110,10 @@ if (db_engine := os.getenv("DATABASE", None)) == "sqlite3":
 else:
     default = {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
+        "NAME": os.getenv("DB_NAME", "AppDatabase"),
+        "USER": os.getenv("DB_USER", "appuser"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
+        "HOST": os.getenv("DB_HOST", "db"),
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 
