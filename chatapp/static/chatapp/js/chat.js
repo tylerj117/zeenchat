@@ -124,6 +124,7 @@ class ChatManager {
                 // Then send through WebSocket
                 if (this.socket.readyState === WebSocket.OPEN) {
                     this.socket.send(JSON.stringify({
+                        'type': 'message',
                         'message': message,
                         'sender': this.currentUser
                     }));
