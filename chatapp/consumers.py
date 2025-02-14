@@ -30,18 +30,57 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        sender = text_data_json['sender']
+        event_type = text_data_json.get("type") #Check the type of event
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'sender': sender
-            }
-        )
+        if event_type == "message":
+            message = text_data_json['message']
+            sender = text_data_json['sender']     
+        
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'sender': sender
+                }
+            )
+        
+        elif event_type == "typing":
+            username = text_data_json["username"]
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'user_typing',
+                    "username": username,
+                }
+            )
+             
+        elif event_type == "stopped_typing":
+            username = text_data_json["username"]
+        
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'user_stopped_typing',
+                    'username': username,
+                }
+            )        
+
+    #Outgoing Typing indicator functions
+
+    async def user_typing(self, event):
+        await self.send(text_data = json.dumps({
+            'type':'typing',
+            'username': event['username'],
+        }))
+
+    async def user_stopped_typing(self, event):
+        await self.send(text_data = json.dumps({
+            'type':'stopped_typing',
+            'username': event['username'],
+        }))
 
     # Receive message from room group
     async def chat_message(self, event):
