@@ -1,0 +1,77 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile.dev in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - '8000:8000'
+    volumes:
+      - static-vol:/app/static
+      - media-vol:/app/media
+    networks:
+      - appNet
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17.2-alpine
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+    networks:
+      - appNet
+    expose:
+      - '${DB_PORT}'
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "80:80"
+#    env_file:
+#      - .env
+#    volumes:
+#      - ../nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
+#      - static-vol:/app/static
+#      - media-vol:/app/media
+#    depends_on:
+#      - server
+#    networks:
+#      - appNet
+#        - tunnelNet  # Cloudflared tunnel network
+
+volumes:
+  db-data:
+  static-vol:
+  media-vol:
+networks:
+  appNet:
+    driver: bridge
+  # tunnelNet:
+  #   external: true
+
