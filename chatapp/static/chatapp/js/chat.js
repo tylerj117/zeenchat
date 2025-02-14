@@ -8,9 +8,36 @@ class ChatManager {
         this.messageForm = document.getElementById('chat-form');
         this.messagesDiv = document.getElementById('chat-messages');
         this.csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        this.typingIndicator = document.getElementById('typing-indicator');
+        this.typingUsername = document.getElementById('typing-username');
+        this.typingTimeout = null;
         
         this.initializeWebSocket();
         this.setupEventListeners();
+        this.setupTypingDetection();
+    }
+
+    setupTypingDetection() {
+        this.messageInput.addEventListener('input', () => {
+            if (!this.typingTimeout) {
+                this.socket.send(JSON.stringify({
+                    'type': 'typing',
+                    'username': this.currentUser
+                }));
+            }
+            
+            // Clear existing timeout
+            clearTimeout(this.typingTimeout);
+            
+            // Set new timeout
+            this.typingTimeout = setTimeout(() => {
+                this.socket.send(JSON.stringify({
+                    'type': 'stopped_typing',
+                    'username': this.currentUser
+                }));
+                this.typingTimeout = null;
+            }, 1000); // We stop typing indicator after 1 second of no input
+        });
     }
 
     initializeWebSocket() {
@@ -33,6 +60,29 @@ class ChatManager {
             console.log('WebSocket connection closed');
             setTimeout(() => this.initializeWebSocket(), 5000);
         };
+        this.socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'typing') {
+                this.showTypingIndicator(data.username);
+            } else if (data.type === 'stopped_typing') {
+                this.hideTypingIndicator();
+            } else {
+                this.appendMessage(data.message, data.sender === this.currentUser);
+                this.hideTypingIndicator();
+            }
+        };
+    }
+
+    showTypingIndicator(username) {
+        if (username !== this.currentUser) {
+            this.typingUsername.textContent = username;
+            this.typingIndicator.classList.remove('hidden');
+        }
+    }
+
+    hideTypingIndicator() {
+        this.typingIndicator.classList.add('hidden');
     }
 
     async saveMessageToDatabase(message) {
