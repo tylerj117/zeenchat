@@ -1,12 +1,3 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile.dev in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
   server:
     build:
@@ -29,15 +20,16 @@ services:
 
   redis:
     image: redis:${REDIS_IMAGE_TAG:-7.4.2-alpine}
-    volumes:
-      - ../redis/conf:/usr/local/etc/redis
-    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:?password missing!}
+    # volumes:
+    #   - ../redis/conf:/usr/local/etc/redis
+    # command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:?password not set!}
+    command: redis-server --requirepass ${REDIS_PASSWORD:?password not set!}
     container_name: ${REDIS_HOSTNAME:-redis}
     hostname: ${REDIS_HOSTNAME:-redis}
     networks:
-      appNet:
+      - appNet
     expose:
-      - ${REDIS_PORT:-6379}
+      - '${REDIS_PORT:-6379}'
 
   db:
     image: postgres:${DB_IMAGE_TAG:-17.2-alpine}
@@ -48,15 +40,15 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_HOST: ${DB_HOST}
-      POSTGRES_PORT: ${DB_PORT}
+      POSTGRES_DB: ${DB_NAME:-AppDatabase}
+      POSTGRES_USER: ${DB_USER:-appuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?password not set!}
+      POSTGRES_HOST: ${DB_HOST:-db}
+      POSTGRES_PORT: ${DB_PORT:-5432}
     networks:
       - appNet
     expose:
-      - '${DB_PORT}'
+      - '${DB_PORT:-5432}'
     healthcheck:
       test: [ "CMD", "pg_isready" ]
       interval: 10s
@@ -64,7 +56,7 @@ services:
       retries: 5
 
 #  nginx:
-#    image: nginx:latest
+#    image: nginx${PROXY_IMAGE_TAG:-latest}
 #    ports:
 #      - "80:80"
 #    env_file:
