@@ -120,8 +120,109 @@ zeenchat/
 └── manage.py             # Django management script
 ```
 
-## Production Deployment
+## Docker Environment Variables
 
+### `DJANGO_SECRET_KEY`
+
+**Default:** ' ' (Empty string) *(**REQUIRED** for production deployment)*
+
+A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key) for more information.
+
+### `DJANGO_DEBUG`
+
+**Default:** *False* *(optional)*
+
+A boolean that turns on/off debug mode. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#debug) for more information.
+
+**SECURITY NOTE**: Never deploy a site into production with DEBUG turned on.
+
+### `DJANGO_ALLOWED_HOSTS`
+
+**Default:** *[]* *(Empty list) (**REQUIRED** for production deployment)*
+
+A comma-seperated list of strings representing the host/domain names that this Django site can serve. This is a security measure to prevent HTTP Host header attacks, which are possible even under many seemingly-safe web server configurations. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts) for more information.
+
+Example  ENV file entry: `DJANGO_ALLOWED_HOSTS=localhost, 127.0.0.1, yourdomain.com`
+
+### `CSRF_TRUSTED_ORIGINS`
+
+**Default:** *[]* *(Empty list) (**REQUIRED** for production deployment)*
+
+A comma-seperated list of trusted origins for unsafe requests (e.g. POST). See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#csrf-trusted-origins) for more information.
+
+Example  ENV file entry: `CSRF_TRUSTED_ORIGINS=http://localhost, http://127.0.0.1, http://yourdomain.com, https://yourdomain.com`
+
+### `CSRF_COOKIE_SECURE`
+
+**Default:** *False* (**REQUIRED** for production deployment)*
+
+Whether to use a secure cookie for the CSRF cookie. See [Django documentation](https://docs.djangoproject.com/en/5.1/ref/settings/#csrf-cookie-secure) for more information.
+
+**SECURITY NOTE**: Warning:  Must be True for production deployment.
+
+### `DATABASE` 
+
+**Default:** *Postgres* *(optional)*
+
+Specify database engine to use. Use mapping below:
+- 'sqlite3': SQLite3
+- 'pg': Postgres
+- ' ' *(null entry)*: Postgres
+
+Example ENV file entry: `DATABASE=sqlite3`
+
+### `DB_NAME`
+
+**Default:** *AppDatabase* *(optional)*
+
+To set custom database name (ignored when using SQLite3).
+
+### `DB_USER`
+
+**Default:** *appuser* *(optional)*
+
+To set custom database user (ignored when using SQLite3).
+
+### `DB_PASSWORD`
+
+**Default:** *appuser* *(**REQUIRED**) unless using SQLite3)*
+
+To set custom database password (ignored when using SQLite3).
+
+### `DB_HOST`
+
+**Default:** *db* *(optional)*
+
+To set custom database hostname (ignored when using SQLite3).
+
+### `DB_PORT`
+
+**Default:** *5432* *(optional)*
+
+To set custom database port number (ignored when using SQLite3).
+
+### `REDIS_PASSWORD`
+
+**Default:** *none* ***(REQUIRED)***
+
+To set password for Redis. See [Redis documentation]() for more information.
+
+**SECURITY NOTE**: Warning: since Redis is pretty fast, an outside user can try up to 1 million passwords per second against a modern box. This means that you should use very strong passwords, otherwise they will be very easy to break.
+
+### `REDIS_HOST`
+
+**Default:** *redis* *(optional)*
+
+To set custom Redis hostname.
+
+### `REDIS_PORT`
+
+**Default:** *6379* *(optional)*
+
+To set custom Redis port number.
+
+## Production Deployment
+___
 For production deployment, ensure you:
 
 1. Set `DEBUG=False` in .env

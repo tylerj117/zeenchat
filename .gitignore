@@ -5,3 +5,4 @@ chatapp/migrations/
 db.sqlite3
 *./*env
 *.sqlite3
+/docker/.env
