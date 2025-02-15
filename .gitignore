@@ -4,3 +4,4 @@ chatapp/__pycache__
 chatapp/migrations/
 db.sqlite3
 *./*env
+*.sqlite3
