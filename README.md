@@ -18,7 +18,7 @@ ZeenChat is a secure, real-time chat application built with Django and WebSocket
 
 - **Backend**: Django 5.1
 - **WebSockets**: Django Channels
-- **Database**: SQLite (default), compatible with PostgreSQL
+- **Database**: Postgres (default), can be configured to use SQLite
 - **Frontend**: HTML, JavaScript, Tailwind CSS
 - **Message Queue**: Redis
 - **Encryption**: cryptography.fernet
@@ -26,7 +26,8 @@ ZeenChat is a secure, real-time chat application built with Django and WebSocket
 ## Prerequisites
 
 - Python 3.8 or higher
-- Redis Server (not required for Docker Installation method)
+- Redis Server *(included in Docker stack; must be installed separately for traditional installation)*
+- Docker Compose *(Docker installation only)*
 - Git
 
 
