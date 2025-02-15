@@ -100,13 +100,25 @@ WSGI_APPLICATION = 'zeenchat.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
+# Currently Configured Databases: Postgres (default), SQLite
+# Database engine can be chosen via environment variable "DATABASE"
+if (db_engine := os.getenv("DATABASE", None)) == "sqlite3":
+    default = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+# elif db_engine == "":
+else:
+    default = {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "AppDatabase"),
+        "USER": os.getenv("DB_USER", "appuser"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "db"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+    }
+
+DATABASES = { 'default': default }
 
 
 # Password validation
