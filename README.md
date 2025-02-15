@@ -26,19 +26,64 @@ ZeenChat is a secure, real-time chat application built with Django and WebSocket
 ## Prerequisites
 
 - Python 3.8 or higher
-- Redis Server
+- Redis Server (not required for Docker Installation method)
 - Git
 
-## Installation
 
-### Clone the Repository
+# Installation
+___
 
+### Choose an installation method:
+
+1. [Docker Compose (for development only)](#install-via-docker-compose-for-development)
+2. Docker Compose (for production) *(coming soon!)*
+3. [Traditional Venv](#install-via-traditional-virtual-environment)
+
+### Install via Docker Compose (for development)
+
+*See the [official Docker documentation](https://docs.docker.com/compose/install/) for more information on Compose, including installation.*
+
+#### 1. Clone the Repository
 ```bash
-git clone https://github.com/frzn23/zeenchat.git
-cd zeenchat
+$ git clone https://github.com/frzn23/zeenchat.git
+$ cd zeenchat
 ```
 
-### Setting up Virtual Environment
+#### 3. Update .env file
+
+```bash
+$ cp docker/env.example .env
+$ nano docker/.env
+```
+
+Update applicable ENV file entries. 
+- At a minimum, update the REDIS_PASSWORD and DB_PASSWORD entries. 
+- For production deployment, additional entries must be updated. See [Environment Variables](#docker-environment-variables) for more information.
+
+#### 4. Create and Start Containers
+```bash
+$ docker compose -f docker/compose.dev.yaml up --build -d
+```
+
+The application will be available at http://localhost:8000.
+
+#### 5. Create Superuser
+
+```bash
+# First, get the container ID for the server
+$ docker ps
+
+# Then, exec in to create Superuser
+$ docker exec -it <container_id> python manage.py createsupuser
+```
+
+## Install via Traditional Virtual Environment
+
+#### 1. Clone the Repository
+```bash
+$ git clone https://github.com/frzn23/zeenchat.git
+$ cd zeenchat
+```
 
 #### Windows
 ```bash
@@ -52,12 +97,12 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-### Install Dependencies
+### 3. Install Dependencies
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
-### Install and Start Redis Server
+### 4. Install and Start Redis Server
 
 #### Windows
 1. Download Redis for Windows from [Redis Downloads](https://pilotfiber.dl.sourceforge.net/project/redis-for-windows.mirror/v5.0.14.1/Redis-x64-5.0.14.1.msi?viasf=1)
@@ -65,29 +110,29 @@ pip install -r requirements.txt
 
 #### Linux
 ```bash
-sudo apt update
-sudo apt install redis-server
-sudo systemctl start redis-server
+$ sudo apt update
+$ sudo apt install redis-server
+$ sudo systemctl start redis-server
 ```
 
 #### MacOS
 ```bash
-brew install redis
-brew services start redis
+% brew install redis
+% brew services start redis
 ```
 
-### Database Setup
+### 5. Database Setup
 ```bash
-python manage.py makemigrations
-python manage.py migrate
+$ python manage.py makemigrations
+$ python manage.py migrate
 ```
 
-### Create Superuser (Admin)
+### 6. Create Superuser (Admin)
 ```bash
-python manage.py createsuperuser
+$ python manage.py createsuperuser
 ```
 
-### Run Development Server
+### 7. Run Development Server
 ```bash
 python manage.py runserver
 ```
@@ -111,13 +156,17 @@ The application will be available at `http://127.0.0.1:8000`
 ```
 zeenchat/
 ├── chatapp/                 # Main chat application
-│   ├── static/             # Static files (JS, CSS)
-│   ├── templates/          # HTML templates
-│   ├── consumers.py        # WebSocket consumers
-│   ├── models.py           # Database models
-│   └── views.py           # View controllers
-├── zeenchat/              # Project settings
-└── manage.py             # Django management script
+│   ├── static/              # Static files (JS, CSS)
+│   ├── templates/           # HTML templates
+│   ├── consumers.py         # WebSocket consumers
+│   ├── middleware.py        # App Middleware
+│   ├── models.py            # Database models
+│   └── views.py             # View controllers
+├── zeenchat/                # Project settings
+├── manage.py                # Django management script
+├── docker/                  # Docker configuration file(s)
+└── redis/
+    └── conf/                # Redis configuration file(s)
 ```
 
 ## Docker Environment Variables
