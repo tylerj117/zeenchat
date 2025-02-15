@@ -57,6 +57,7 @@ ASGI_APPLICATION = 'zeenchat.asgi.application'
 
 
 MIDDLEWARE = [
+    'chatapp.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
